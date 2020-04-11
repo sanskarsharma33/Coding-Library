@@ -1,40 +1,27 @@
-
-vector<vector<pair<int, int> > > addEdge(vector<vector<pair<int, int> > > graph, int u, int v, int wt) 
+vector<pair<int,int> > graph[100001];
+void addEdge(int frm, int to, int weight) 
 { 
-    graph[u].push_back(make_pair(v, wt)); 
-    graph[v].push_back(make_pair(u, wt));
-    return graph; 
+    graph[frm].push_back({ to, weight }); 
+    graph[to].push_back({frm,weight});
 }
-void printGraph(vector<vector<pair<int, int> > > graph, int V) 
-{ 
-    int v; 
-    for (int u = 0; u < V; u++) 
-    {  
-        for (int i=0; i<graph[u].size(); i++) 
-        { 
-            v =graph[u][i].first;  
-            cout<<v<<" "; 
-        } 
-        cout<<endl; 
-    } 
-}
-vector<int> dijkstra(vector<vector<pair<int,int> > > graph, int src)
+vector<int> dijkstra( int src, int V)
 { 
     priority_queue< pair<int,int>, vector <pair<int,int> > , greater<pair<int,int> > > pq; 
-    vector<int> dist(V, INF); 
-    vector<int> parent;
-    pq.push(make_pair(0, src)); 
+    vector<int> dist(V+1, INF); 
+    //cout<<"!";
+    vector<int> parent(V+1, 0);
+    pq.push(make_pair(0, src));
+    //cout<<"!"; 
     dist[src] = 0; 
     while (!pq.empty()) 
     { 
         int u = pq.top().second; 
         pq.pop(); 
-  
-        list< pair<int, int> >::iterator i; 
-        for (i = graph[u].begin(); i != graph[u].end(); ++i) 
+   
+        for (int i = 0; i < graph[u].size(); ++i) 
         { 
-            int v = (*i).first; 
-            int weight = (*i).second; 
+            int v = (graph[u][i]).first; 
+            int weight = (graph[u][i]).second; 
   
             if (dist[v] > dist[u] + weight) 
             { 
@@ -44,5 +31,8 @@ vector<int> dijkstra(vector<vector<pair<int,int> > > graph, int src)
             } 
         } 
     }
+    // for(int i=1; i<=V; i++)
+    //  cout<<dist[i]<<" ";
+    // cout<<endl;
     return dist;
 }
