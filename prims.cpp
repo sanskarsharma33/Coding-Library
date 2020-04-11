@@ -1,29 +1,27 @@
-void primMST(vector<pair<int,int> > graph[], int V) 
-{ 
-    priority_queue< pair<int,int>, vector <pair<int,int> > , greater<pair<int,int> > > pq; 
-  
-    int src = 0; 
-    vector<int> key(V, INF); 
-    vector<int> parent(V, -1); 
-    vector<bool> inMST(V, false); 
-    pq.push(make_pair(0, src)); 
-    key[src] = 0; 
-    while (!pq.empty()) 
-    { 
-        int u = pq.top().second; 
-        pq.pop(); 
-  
-        inMST[u] = true;
-        for (auto x : graph[u]) 
-        { 
-            int v = x.first; 
-            int weight = x.second; 
-            if (inMST[v] == false && key[v] > weight) 
-            { 
-                key[v] = weight; 
-                pq.push(make_pair(key[v], v)); 
-                parent[v] = u; 
-            } 
-        } 
-    } 
+long long prim(vector<pair<int,int> > adj[], int x, int n)
+{
+    bool marked[n];
+    memset(marked,false,n);
+    priority_queue<pair<int,int>, vector<pair<int,int> >, greater<pair<int,int> > > Q;
+    int y;
+    long long minimumCost = 0;
+    pair<int,int> p;
+    Q.push(make_pair(0, x));
+    while(!Q.empty())
+    {
+        p = Q.top();
+        Q.pop();
+        x = p.second;
+        if(marked[x] == true)
+            continue;
+        minimumCost += p.first;
+        marked[x] = true;
+        for(int i = 0;i < adj[x].size();++i)
+        {
+            y = adj[x][i].second;
+            if(marked[y] == false)
+                Q.push(adj[x][i]);
+        }
+    }
+    return minimumCost;
 } 
