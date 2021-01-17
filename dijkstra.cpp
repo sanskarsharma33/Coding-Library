@@ -1,17 +1,17 @@
 vector<pair<int,int> > graph[100001];
+
 void addEdge(int frm, int to, int weight) 
 { 
     graph[frm].push_back({ to, weight }); 
     graph[to].push_back({frm,weight});
 }
-vector<int> dijkstra( int src, int V)
+
+pair<vector<int>,vector<int>> dijkstra( int src, int V)
 { 
     priority_queue< pair<int,int>, vector <pair<int,int> > , greater<pair<int,int> > > pq; 
     vector<int> dist(V+1, INF); 
-    //cout<<"!";
     vector<int> parent(V+1, 0);
     pq.push(make_pair(0, src));
-    //cout<<"!"; 
     dist[src] = 0; 
     while (!pq.empty()) 
     { 
@@ -31,8 +31,17 @@ vector<int> dijkstra( int src, int V)
             } 
         } 
     }
-    // for(int i=1; i<=V; i++)
-    //  cout<<dist[i]<<" ";
-    // cout<<endl;
-    return dist;
+    return {dist,parent};
+}
+void findPath(vector<int> parent, int final)
+{
+	vector<int> path;
+	while(final!=0)
+	{
+		path.push_back(final);
+		final=parent[final];
+	}
+	for(int i=path.size()-1; i>0; i--)
+		cout<<path[i]<<"->";
+	cout<<path[0];
 }
